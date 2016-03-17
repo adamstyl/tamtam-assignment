@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Trailer search test</title>
+</head>
+<body>
+    <div>
+        <h2>Search movie trailer</h2>
+        <p><input type="text" id="searchText" /></p>
+        <p><input type="button" value="Search" onclick="find();" /></p>
+        <div id="movies">
+            
+        </div>
+    </div>
+
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+    <script>
+        var uri = 'trailers/search';
+
+        function find() {
+            var searchTerm = $('#searchText').val();
+            $.getJSON(uri + '?query=' + searchTerm)
+                .done(function (data) {
+                    $('#movies').html('');
+                    $.each(data.Results, function (key, item) {
+                        var para = $('<p>', { text: item.Title + ' ' } ).appendTo($('#movies'));
+                        para.append('<a href="' + item.TrailerUrl + '" target="_blank">video location</a>');
+                    });
+                })
+                .fail(function (jqXHR, textStatus, err) {
+                    $('#movies').text('Error: ' + err);
+                });
+        }
+    </script>
+</body>
+</html>
